@@ -22,10 +22,17 @@ const props = defineProps({
   },
 })
 
+// Emits
+const emit = defineEmits(['focus', 'blur'])
+
 // Variables
 const startTime = ref(DEFAULT_START_TIME)
 const endTime = ref(DEFAULT_END_TIME)
 const isHovering = ref(false)
+let isFocusing = ref(null)
+
+const startTimeSelect = ref(null)
+const endTimeSelect = ref(null)
 
 // Computed
 const times = computed(() => {
@@ -101,33 +108,51 @@ function isGreater(endTime) {
   d2.setSeconds(0)
   return d2 > d1
 }
+
+function setFocusing(value) {
+  isFocusing = value
+  if (isFocusing) {
+    const node = document.querySelector('.vuetify3-time-range-picker .v-field:not(.v-field--focused)')
+    node.classList.add('v-field--focused')
+    emit('focus')
+    return
+  }
+  const nodes = document.querySelectorAll('.vuetify3-time-range-picker .v-field.v-field--focused')
+  nodes.forEach((node) => node.classList.remove('v-field--focused'))
+  emit('blur')
+}
 </script>
 
 <template>
   <div
-    class="container"
+    class="vuetify3-time-range-picker"
     :class="{ 'is-hovering': isHovering }"
     @mouseover="isHovering = true"
     @mouseleave="isHovering = false"
+    @click="setFocusing(true)"
   >
     <v-select
+      ref="startTimeSelect"
       v-bind="$attrs"
       v-model="startTime"
       :label="props.label"
       :items="getTimes('start')"
       class="start-time"
+      @blur="setFocusing(false)"
     ></v-select>
     <v-select
-       v-bind="$attrs"
-       v-model="endTime"
+      ref="endTimeSelect"
+      v-bind="$attrs"
+      v-model="endTime"
       :items="getTimes('end')"
       class="end-time"
+      @blur="setFocusing(false)"
     ></v-select>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.container {
+.vuetify3-time-range-picker {
   display: flex;
 
   &.is-hovering {
