@@ -115,11 +115,13 @@ function isGreater(endTime) {
       v-model="startTime"
       :label="props.label"
       :items="getTimes('start')"
+      class="start-time"
     ></v-select>
     <v-select
        v-bind="$attrs"
        v-model="endTime"
       :items="getTimes('end')"
+      class="end-time"
     ></v-select>
   </div>
 </template>
@@ -131,6 +133,17 @@ function isGreater(endTime) {
   &.is-hovering {
     :deep(.v-field__outline) {
       --v-field-border-opacity: var(--v-high-emphasis-opacity)
+    }
+  }
+
+  .start-time {
+    :deep(.v-field__outline__end) {
+      border-right-style: dashed;
+    }
+  }
+  .end-time {
+    :deep(.v-field__outline__start) {
+      border-left-style: hidden;
     }
   }
 }
