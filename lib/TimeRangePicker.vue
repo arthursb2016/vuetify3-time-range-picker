@@ -103,16 +103,23 @@ function isGreater(endTime) {
 </script>
 
 <template>
-  <div>
+  <div class="container">
     <v-select
-      :label="label"
+      v-bind="$attrs"
+      v-model="startTime"
+      :label="props.label"
       :items="getTimes('start')"
     ></v-select>
     <v-select
+       v-bind="$attrs"
+       v-model="endTime"
       :items="getTimes('end')"
     ></v-select>
   </div>
 </template>
 
 <style lang="scss" scoped>
+.container {
+  display: flex;
+}
 </style>
