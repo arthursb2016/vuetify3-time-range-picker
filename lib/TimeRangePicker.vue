@@ -25,6 +25,7 @@ const props = defineProps({
 // Variables
 const startTime = ref(DEFAULT_START_TIME)
 const endTime = ref(DEFAULT_END_TIME)
+const isHovering = ref(false)
 
 // Computed
 const times = computed(() => {
@@ -103,7 +104,12 @@ function isGreater(endTime) {
 </script>
 
 <template>
-  <div class="container">
+  <div
+    class="container"
+    :class="{ 'is-hovering': isHovering }"
+    @mouseover="isHovering = true"
+    @mouseleave="isHovering = false"
+  >
     <v-select
       v-bind="$attrs"
       v-model="startTime"
@@ -121,5 +127,11 @@ function isGreater(endTime) {
 <style lang="scss" scoped>
 .container {
   display: flex;
+
+  &.is-hovering {
+    :deep(.v-field__outline) {
+      --v-field-border-opacity: var(--v-high-emphasis-opacity)
+    }
+  }
 }
 </style>
