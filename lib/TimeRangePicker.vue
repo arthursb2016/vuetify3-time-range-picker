@@ -196,7 +196,7 @@ onMounted(() => {
     :deep(.v-field__outline__end) {
       border-right-style: dashed;
     }
-    :deep(.v-field.v-field--variant-filled) {
+    :deep(.v-field.v-field--variant-filled), :deep(.v-field.v-field--variant-solo) {
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;
     }
@@ -205,7 +205,7 @@ onMounted(() => {
     :deep(.v-field__outline__start) {
       border-left-style: hidden;
     }
-    :deep(.v-field.v-field--variant-filled) {
+    :deep(.v-field.v-field--variant-filled), :deep(.v-field.v-field--variant-solo) {
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;
     }
