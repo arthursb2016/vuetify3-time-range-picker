@@ -167,6 +167,7 @@ onMounted(() => {
     <v-select
       v-bind="$attrs"
       v-model="endTime"
+      :label="$attrs.variant === 'filled' ? ' ' : undefined"
       :items="getTimes('end')"
       class="end-time"
       @blur="setFocusing(false)"
