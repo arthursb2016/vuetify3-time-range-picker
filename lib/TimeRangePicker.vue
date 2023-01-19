@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { VSelect, VIcon, VCheckbox }from 'vuetify/components'
 
 // Consts
@@ -8,6 +8,10 @@ const DEFAULT_END_TIME = '23:59'
 
 // Props
 const props = defineProps({
+  modelValue: {
+    type: Object,
+    required: true,
+  },
   label: {
     type: String,
     default: () => 'Interval',
@@ -23,16 +27,13 @@ const props = defineProps({
 })
 
 // Emits
-const emit = defineEmits(['focus', 'blur'])
+const emit = defineEmits(['update:modelValue', 'focus', 'blur'])
 
 // Variables
-const startTime = ref(DEFAULT_START_TIME)
-const endTime = ref(DEFAULT_END_TIME)
-const isHovering = ref(false)
+let startTime = ref(DEFAULT_START_TIME)
+let endTime = ref(DEFAULT_END_TIME)
+let isHovering = ref(false)
 let isFocusing = ref(null)
-
-const startTimeSelect = ref(null)
-const endTimeSelect = ref(null)
 
 // Computed
 const times = computed(() => {
@@ -93,7 +94,7 @@ function getTimes(name) {
   })
 }
 
-function isGreater(endTime) {
+function isGreater(value) {
   const d1 = new Date()
   const startHour = parseInt(startTime.value.split(':')[0], 10)
   const startMinute = parseInt(startTime.value.split(':')[1], 10)
@@ -101,8 +102,8 @@ function isGreater(endTime) {
   d1.setMinutes(startMinute)
   d1.setSeconds(0)
   const d2 = new Date()
-  const endHour = parseInt(endTime.split(':')[0], 10)
-  const endMinute = parseInt(endTime.split(':')[1], 10)
+  const endHour = parseInt(value.split(':')[0], 10)
+  const endMinute = parseInt(value.split(':')[1], 10)
   d2.setHours(endHour)
   d2.setMinutes(endMinute)
   d2.setSeconds(0)
@@ -113,14 +114,38 @@ function setFocusing(value) {
   isFocusing = value
   if (isFocusing) {
     const node = document.querySelector('.vuetify3-time-range-picker .v-field:not(.v-field--focused)')
-    node.classList.add('v-field--focused')
-    emit('focus')
+    if (node) {
+      node.classList.add('v-field--focused')
+      emit('focus')
+    }
     return
   }
   const nodes = document.querySelectorAll('.vuetify3-time-range-picker .v-field.v-field--focused')
-  nodes.forEach((node) => node.classList.remove('v-field--focused'))
-  emit('blur')
+  if (nodes) {
+    nodes.forEach((node) => node.classList.remove('v-field--focused'))
+    emit('blur')
+  }
 }
+
+function onChange() {
+  emit('update:modelValue', { start: startTime, end: endTime })
+}
+
+function initValues() {
+  const finder = time => (i) => i === time
+  const start = startTimes.value.find(finder(props.modelValue.start))
+  const end = endTimes.value.find(finder(props.modelValue.end))
+  startTime.value = start || DEFAULT_START_TIME
+  endTime.value = end || DEFAULT_END_TIME
+  if (start && end) return
+  onChange()
+}
+
+// Hooks
+onMounted(() => {
+  console.log('onMounted')
+  initValues()
+})
 </script>
 
 <template>
@@ -132,7 +157,6 @@ function setFocusing(value) {
     @click="setFocusing(true)"
   >
     <v-select
-      ref="startTimeSelect"
       v-bind="$attrs"
       v-model="startTime"
       :label="props.label"
@@ -141,7 +165,6 @@ function setFocusing(value) {
       @blur="setFocusing(false)"
     ></v-select>
     <v-select
-      ref="endTimeSelect"
       v-bind="$attrs"
       v-model="endTime"
       :items="getTimes('end')"
