@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, useAttrs, onMounted } from 'vue'
 import { VSelect, VIcon, VCheckbox }from 'vuetify/components'
 
 // Consts
@@ -28,6 +28,9 @@ const props = defineProps({
 
 // Emits
 const emit = defineEmits(['update:modelValue', 'focus', 'blur'])
+
+// Attrs
+const attrs = useAttrs()
 
 // Variables
 let startTime = ref(DEFAULT_START_TIME)
@@ -71,6 +74,10 @@ const computedDisabledTimes = computed(() => {
     return [disabledTimes]
   }
   return disabledTimes
+})
+
+const requiresEndEmptyLabel = computed(() => {
+  return ['filled', 'solo'].includes(attrs.variant)
 })
 
 // Methods
@@ -167,7 +174,7 @@ onMounted(() => {
     <v-select
       v-bind="$attrs"
       v-model="endTime"
-      :label="$attrs.variant === 'filled' ? ' ' : undefined"
+      :label="requiresEndEmptyLabel ? ' ' : undefined"
       :items="getTimes('end')"
       class="end-time"
       @blur="setFocusing(false)"
