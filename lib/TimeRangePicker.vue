@@ -188,10 +188,18 @@ onMounted(() => {
     :deep(.v-field__outline__end) {
       border-right-style: dashed;
     }
+    :deep(.v-field.v-field--variant-filled) {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
   }
   .end-time {
     :deep(.v-field__outline__start) {
       border-left-style: hidden;
+    }
+    :deep(.v-field.v-field--variant-filled) {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
     }
   }
 }
