@@ -3,13 +3,9 @@ import './style.css'
 import App from './App.vue'
 
 import 'vuetify/styles'
+import '@mdi/font/css/materialdesignicons.css'
 import { createVuetify } from 'vuetify'
-import { VSelect, VIcon, VCheckbox }from 'vuetify/components'
-import * as directives from 'vuetify/directives'
 
-const vuetify = createVuetify({
-  components: { VSelect, VIcon, VCheckbox },
-  directives,
-})
+const vuetify = createVuetify({})
 
 createApp(App).use(vuetify).mount('#app')
