@@ -212,6 +212,7 @@ watch(endTime, () => {
         :label="props.inputLabel"
         :items="getTimes('start')"
         class="start-time"
+        hide-details
         @blur="setFocusing(false)"
       ></v-select>
       <v-select
@@ -220,6 +221,7 @@ watch(endTime, () => {
         :label="requiresEndEmptyLabel ? ' ' : undefined"
         :items="getTimes('end')"
         class="end-time"
+        hide-details
         @blur="setFocusing(false)"
       ></v-select>
     </div>
@@ -234,6 +236,9 @@ watch(endTime, () => {
         :readonly="wholeDay"
         :disabled="$attrs.disabled || false"
         hide-details
+        :class="{
+          'cursor-not-allowed': wholeDay,
+        }"
         @change="onWholeDayChange"
       ></v-checkbox>
     </div>
@@ -255,6 +260,8 @@ watch(endTime, () => {
     .start-time {
       :deep(.v-field__outline__end) {
         border-right-style: dashed;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
       }
       :deep(.v-field.v-field--variant-filled), :deep(.v-field.v-field--variant-solo) {
         border-top-right-radius: 0;
@@ -264,10 +271,21 @@ watch(endTime, () => {
     .end-time {
       :deep(.v-field__outline__start) {
         border-left-style: hidden;
+          border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
       }
       :deep(.v-field.v-field--variant-filled), :deep(.v-field.v-field--variant-solo) {
         border-top-left-radius: 0;
         border-bottom-left-radius: 0;
+      }
+    }
+  }
+  .whole-day {
+    :deep(.v-input) {
+      &.cursor-not-allowed {
+        .v-label, input {
+          cursor: not-allowed !important;
+        }
       }
     }
   }
