@@ -185,9 +185,9 @@ onMounted(() => {
 watch(startTime, () => {
   checkWholeDay()
   nextTick(() => {
-    const isEndTimeStillAvailable = endTimes.find(t => t === endTime)
+    const isEndTimeStillAvailable = endTimes.value.find(t => t === endTime.value)
     if (!isEndTimeStillAvailable) {
-      endTime = endTimes[0]
+      endTime.value = endTimes.value[0]
     }
   })
 })
