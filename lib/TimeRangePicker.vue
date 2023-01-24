@@ -163,17 +163,17 @@ function initValues() {
 
 function onWholeDayChange() {
   if (!wholeDay) return
-  startTime = '00:00'
-  endTime = '23:59'
+  startTime.value = '00:00'
+  endTime.value = '23:59'
   onChange()
 }
 
 function checkWholeDay() {
-  if (startTime === '00:00' && endTime === '23:59') {
-    wholeDay = true
+  if (startTime.value === '00:00' && endTime.value === '23:59') {
+    wholeDay.value = true
     return
   }
-  wholeDay = false
+  wholeDay.value = false
 }
 
 // Hooks
