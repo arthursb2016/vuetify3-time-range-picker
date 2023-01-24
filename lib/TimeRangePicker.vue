@@ -1,6 +1,6 @@
 <script setup>
-import { ref, computed, useAttrs, onMounted } from 'vue'
-import { VSelect, VIcon, VCheckbox }from 'vuetify/components'
+import { ref, computed, watch, nextTick, useAttrs, onMounted } from 'vue'
+import { VSelect, VCheckbox }from 'vuetify/components'
 
 // Consts
 const DEFAULT_START_TIME = '00:00'
@@ -8,11 +8,12 @@ const DEFAULT_END_TIME = '23:59'
 
 // Props
 const props = defineProps({
+  // Input
   modelValue: {
     type: Object,
     required: true,
   },
-  label: {
+  inputLabel: {
     type: String,
     default: () => 'Interval',
   },
@@ -23,6 +24,16 @@ const props = defineProps({
   disabledTimes: {
     type: [String, Array],
     default: () => [],
+  },
+
+  // Whole day checkbox
+  hideWholeDayCheckbox: {
+    type: Boolean,
+    default: () => false,
+  },
+  wholeDayLabel: {
+    type: String,
+    default: () => 'Whole day',
   },
 })
 
@@ -37,6 +48,7 @@ let startTime = ref(DEFAULT_START_TIME)
 let endTime = ref(DEFAULT_END_TIME)
 let isHovering = ref(false)
 let isFocusing = ref(null)
+let wholeDay = ref(true)
 
 // Computed
 const times = computed(() => {
@@ -119,15 +131,16 @@ function isGreater(value) {
 
 function setFocusing(value) {
   isFocusing = value
+  const componentQuery = '.vuetify3-time-range-picker .v-selects-row-container'
   if (isFocusing) {
-    const node = document.querySelector('.vuetify3-time-range-picker .v-field:not(.v-field--focused)')
+    const node = document.querySelector(`${componentQuery} .v-field:not(.v-field--focused)`)
     if (node) {
       node.classList.add('v-field--focused')
       emit('focus')
     }
     return
   }
-  const nodes = document.querySelectorAll('.vuetify3-time-range-picker .v-field.v-field--focused')
+  const nodes = document.querySelectorAll(`${componentQuery} .v-field.v-field--focused`)
   if (nodes) {
     nodes.forEach((node) => node.classList.remove('v-field--focused'))
     emit('blur')
@@ -148,66 +161,114 @@ function initValues() {
   onChange()
 }
 
+function onWholeDayChange() {
+  if (!wholeDay) return
+  startTime = '00:00'
+  endTime = '23:59'
+  onChange()
+}
+
+function checkWholeDay() {
+  if (startTime === '00:00' && endTime === '23:59') {
+    wholeDay = true
+    return
+  }
+  wholeDay = false
+}
+
 // Hooks
 onMounted(() => {
-  console.log('onMounted')
   initValues()
+})
+
+// Watchers
+watch(startTime, () => {
+  checkWholeDay()
+  nextTick(() => {
+    const isEndTimeStillAvailable = endTimes.find(t => t === endTime)
+    if (!isEndTimeStillAvailable) {
+      endTime = endTimes[0]
+    }
+  })
+})
+
+watch(endTime, () => {
+  checkWholeDay()
 })
 </script>
 
 <template>
-  <div
-    class="vuetify3-time-range-picker"
-    :class="{ 'is-hovering': isHovering }"
-    @mouseover="isHovering = true"
-    @mouseleave="isHovering = false"
-    @click="setFocusing(true)"
-  >
-    <v-select
-      v-bind="$attrs"
-      v-model="startTime"
-      :label="props.label"
-      :items="getTimes('start')"
-      class="start-time"
-      @blur="setFocusing(false)"
-    ></v-select>
-    <v-select
-      v-bind="$attrs"
-      v-model="endTime"
-      :label="requiresEndEmptyLabel ? ' ' : undefined"
-      :items="getTimes('end')"
-      class="end-time"
-      @blur="setFocusing(false)"
-    ></v-select>
+  <div class="vuetify3-time-range-picker">
+    <div
+      class="v-selects-row-container"
+      :class="{ 'is-hovering': isHovering }"
+      @mouseover="isHovering = true"
+      @mouseleave="isHovering = false"
+      @click="setFocusing(true)"
+    >
+      <v-select
+        v-bind="$attrs"
+        v-model="startTime"
+        :label="props.inputLabel"
+        :items="getTimes('start')"
+        class="start-time"
+        @blur="setFocusing(false)"
+      ></v-select>
+      <v-select
+        v-bind="$attrs"
+        v-model="endTime"
+        :label="requiresEndEmptyLabel ? ' ' : undefined"
+        :items="getTimes('end')"
+        class="end-time"
+        @blur="setFocusing(false)"
+      ></v-select>
+    </div>
+    <div
+      v-show="!hideWholeDayCheckbox"
+      class="whole-day mt-1 d-flex"
+    >
+      <v-checkbox
+        v-model="wholeDay"
+        class="pt-0 mt-0"
+        :label="wholeDayLabel"
+        :readonly="wholeDay"
+        :disabled="$attrs.disabled || false"
+        hide-details
+        @change="onWholeDayChange"
+      ></v-checkbox>
+    </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .vuetify3-time-range-picker {
-  display: flex;
 
-  &.is-hovering {
-    :deep(.v-field__outline) {
-      --v-field-border-opacity: var(--v-high-emphasis-opacity)
-    }
-  }
+  .v-selects-row-container {
+    display: flex;
 
-  .start-time {
-    :deep(.v-field__outline__end) {
-      border-right-style: dashed;
+    &.is-hovering {
+      :deep(.v-field__outline) {
+        --v-field-border-opacity: var(--v-high-emphasis-opacity)
+      }
     }
-    :deep(.v-field.v-field--variant-filled), :deep(.v-field.v-field--variant-solo) {
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
+
+    .start-time {
+      :deep(.v-field__outline__end) {
+        border-right-style: dashed;
+      }
+      :deep(.v-field.v-field--variant-filled), :deep(.v-field.v-field--variant-solo) {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+      }
     }
-  }
-  .end-time {
-    :deep(.v-field__outline__start) {
-      border-left-style: hidden;
-    }
-    :deep(.v-field.v-field--variant-filled), :deep(.v-field.v-field--variant-solo) {
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
+    .end-time {
+      :deep(.v-field__outline__start) {
+        border-left-style: hidden;
+      }
+      :deep(.v-field.v-field--variant-filled), :deep(.v-field.v-field--variant-solo) {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
     }
   }
 }

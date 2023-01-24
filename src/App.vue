@@ -9,7 +9,7 @@ let range = ref({ start: null, end: null })
   {{ range }}
   <TimeRangePicker
     v-model="range"
-    variant="plain"
+    variant="outlined"
     step="30"
   />
 </template>
