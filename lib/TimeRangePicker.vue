@@ -107,6 +107,12 @@ const VSelectBindings = computed(() => {
   const notAllowed = [
     'active',
     'append-icon',
+    'clearable',
+    'clear-icon',
+    'closable-chips',
+    'counter',
+    'counter-value',
+    'compact',
     'direction',
   ]
   const exclude = [
@@ -313,10 +319,11 @@ watch(endTime, () => {
         :label="wholeDayLabel"
         :readonly="wholeDay"
         :disabled="VSelectBindings.disabled || false"
-        hide-details
         :class="{
           'cursor-not-allowed': wholeDay,
         }"
+        :error-messages="attrs['error-messages'] || attrs.errorMessages"
+        :hide-details="attrs['hide-details'] || attrs.hideDetails"
         @change="onWholeDayChange"
       ></v-checkbox>
     </div>
@@ -367,6 +374,10 @@ watch(endTime, () => {
         .v-label, input {
           cursor: not-allowed !important;
         }
+      }
+      .v-messages {
+        text-align: left;
+        padding-left: 12px;
       }
     }
   }
