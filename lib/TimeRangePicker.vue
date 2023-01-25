@@ -137,7 +137,7 @@ function isGreater(value) {
 }
 
 function setHovering(value) {
-  isHovering = value
+  isHovering.value = value
   if (isHovering) {
     emit('mouseover')
     return
