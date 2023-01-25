@@ -44,7 +44,7 @@ const props = defineProps({
 })
 
 // Emits
-const emit = defineEmits(['update:modelValue', 'focus', 'blur'])
+const emit = defineEmits(['update:modelValue', 'focus', 'blur', 'mouseover', 'mouseleave'])
 
 // Attrs
 const attrs = useAttrs()
@@ -134,6 +134,15 @@ function isGreater(value) {
   d2.setMinutes(endMinute)
   d2.setSeconds(0)
   return d2 > d1
+}
+
+function setHovering(value) {
+  isHovering = value
+  if (isHovering) {
+    emit('mouseover')
+    return
+  }
+  emit('mouseleave')
 }
 
 function setFocusing(value) {
@@ -236,8 +245,8 @@ watch(endTime, () => {
         'is-hovering': isHovering,
         [innerDivCustomClass]: true,
       }"
-      @mouseover="isHovering = true"
-      @mouseleave="isHovering = false"
+      @mouseover="setHovering(true)"
+      @mouseleave="setHovering(false)"
       @click="setFocusing(true)"
     >
       <v-select
