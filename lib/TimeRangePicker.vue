@@ -171,6 +171,14 @@ const VSelectBindings = computed(() => {
   return bindings
 })
 
+const duration = computed(() => {
+  const d1 = getDateTime(startTime.value)
+  const d2 = getDateTime(endTime.value)
+  const secs = Math.floor(Math.abs(d2 - d1) / 1000);
+  const mins = Math.floor(secs / 60);
+  return mins
+})
+
 // Methods
 function doubleDigit(digit) {
   if ((typeof digit === 'string' && digit.length === 1)
@@ -260,7 +268,11 @@ function removeFocusedStyles(query) {
 }
 
 function onChange() {
-  emit('update:modelValue', { start: startTime, end: endTime, nextDay: nextDay })
+  emit('update:modelValue', {
+    start: startTime,
+    end: endTime,
+    duration: duration,
+  })
 }
 
 function initValues() {
