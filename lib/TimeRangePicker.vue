@@ -289,7 +289,7 @@ function checkWholeDay() {
 
 function setEndTime(value) {
   endTime.value = value
-  endTimeMenu = false
+  endTimeMenu.value = false
 }
 
 // Hooks
