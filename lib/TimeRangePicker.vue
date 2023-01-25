@@ -289,6 +289,14 @@ function checkWholeDay() {
   wholeDay.value = false
 }
 
+function onNextDayChange() {
+  if (nextDay.value) {
+    endTime.value = '00:00'
+    return
+  }
+  endTime.value = endTimes.value[0]
+}
+
 function setEndTime(value) {
   endTime.value = value
   endTimeMenu.value = false
@@ -323,14 +331,6 @@ watch(startTime, () => {
 
 watch(endTime, () => {
   checkWholeDay()
-})
-
-watch(nextDay, () => {
-  if (nextDay.value) {
-    endTime.value = '00:00'
-    return
-  }
-  endTime.value = endTimes.value[0]
 })
 </script>
 
@@ -367,6 +367,7 @@ watch(nextDay, () => {
         no-data-text=""
         @blur="setFocusing(false)"
       >
+        <!-- SELECTION TEMPLATE -->
         <template #selection="{ item }">
           <div class="d-flex align-center">
             <v-chip
@@ -380,6 +381,8 @@ watch(nextDay, () => {
             {{ item.title }}
           </div>
         </template>
+
+        <!-- SELECT MENU ITEM TEMPLATE -->
         <template #item="{ item }">
           <div
             class="v-list-item v-list-item--link v-theme--light v-list-item--density-default v-list-item--one-line v-list-item--variant-text"
@@ -403,15 +406,20 @@ watch(nextDay, () => {
             </div>
           </div>
         </template>
-        <template #append-item>
+
+        <!-- NEXT DAY CHECKBOX -->
+        <template v-if="allowNextDay" #append-item>
           <v-checkbox
             v-model="nextDay"
             :label="nextDayLabel"
             hide-details
+            @change="onNextDayChange"
           ></v-checkbox>
         </template>
       </v-select>
     </div>
+
+    <!-- WHOLE DAY CHECKBOX -->
     <div
       v-show="!hideWholeDayCheckbox"
       class="whole-day d-flex"
