@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, watch, nextTick, useAttrs, onMounted } from 'vue'
-import { VSelect, VCheckbox }from 'vuetify/components'
+import { VSelect, VCheckbox, VChip }from 'vuetify/components'
 
 // Consts
 const DEFAULT_START_TIME = '00:00'
@@ -98,9 +98,10 @@ const startTimes = computed(() => {
 
 const endTimes = computed(() => {
   const filter = i => nextDay.value ? true : isGreater(i)
-  return times.value.slice(1, times.value.length)
+  const items = times.value.slice(1, times.value.length)
     .concat([DEFAULT_END_TIME])
     .filter(filter)
+  return (nextDay.value ? ['00:00'] : []).concat(items)
 })
 
 const computedDisabledTimes = computed(() => {
@@ -259,7 +260,7 @@ function removeFocusedStyles(query) {
 }
 
 function onChange() {
-  emit('update:modelValue', { start: startTime, end: endTime })
+  emit('update:modelValue', { start: startTime, end: endTime, nextDay: nextDay })
 }
 
 function initValues() {
@@ -323,6 +324,12 @@ watch(startTime, () => {
 watch(endTime, () => {
   checkWholeDay()
 })
+
+watch(nextDay, () => {
+  if (nextDay.value) {
+    endTime.value = '00:00'
+  }
+})
 </script>
 
 <template>
@@ -358,6 +365,19 @@ watch(endTime, () => {
         no-data-text=""
         @blur="setFocusing(false)"
       >
+        <template #selection="{ item }">
+          <div class="d-flex align-center">
+            <v-chip
+              v-if="nextDay"
+              :color="attrs.color"
+              density="compact"
+              class="mr-1"
+            >
+              +1
+            </v-chip>
+            {{ item.title }}
+          </div>
+        </template>
         <template #item="{ item }">
           <div
             class="v-list-item v-list-item--link v-theme--light v-list-item--density-default v-list-item--one-line v-list-item--variant-text"
@@ -368,6 +388,13 @@ watch(endTime, () => {
             <span class=""></span>
             <div class="v-list-item__content">
               <div class="v-list-item-title">
+                <v-chip
+                  v-if="nextDay"
+                  :color="attrs.color"
+                  class="mr-1"
+                >
+                  {{ nextDayLabel }}
+                </v-chip>
                 {{ item.title }}
               </div>
             </div>
