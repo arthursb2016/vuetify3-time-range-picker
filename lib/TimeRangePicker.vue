@@ -25,6 +25,10 @@ const props = defineProps({
     type: [String, Array],
     default: () => [],
   },
+  maxDuration: {
+    type: [String, Number],
+    default: () => 0,
+  },
 
   // Whole day checkbox
   hideWholeDayCheckbox: {
@@ -97,7 +101,14 @@ const startTimes = computed(() => {
 })
 
 const endTimes = computed(() => {
-  const filter = i => nextDay.value ? true : isGreater(i)
+  const { maxDuration } = props
+  const filter = (i) => {
+    const isTimeGreater = nextDay.value ? true : isGreater(i)
+    const d2 = getDateTime(i, nextDay.value)
+    const d1 = getDateTime(startTime.value)
+    const minDiff = getMinutesDifference(d2, d1)
+    return isTimeGreater && (!maxDuration || minDiff <= maxDuration)
+  }
   const items = times.value.slice(1, times.value.length)
     .concat([DEFAULT_END_TIME])
     .filter(filter)
@@ -172,11 +183,9 @@ const VSelectBindings = computed(() => {
 })
 
 const duration = computed(() => {
+  const d2 = getDateTime(endTime.value, nextDay.value)
   const d1 = getDateTime(startTime.value)
-  const d2 = getDateTime(endTime.value)
-  const secs = Math.floor(Math.abs(d2 - d1) / 1000);
-  const mins = Math.floor(secs / 60);
-  return mins
+  return getMinutesDifference(d2, d1)
 })
 
 // Methods
@@ -200,8 +209,11 @@ function getTimes(name) {
   })
 }
 
-function getDateTime(value) {
+function getDateTime(value, addDay = false) {
   const d = new Date()
+  if (addDay) {
+    d.setDate(d.getDate() + 1)
+  }
   const hour = parseInt(value.split(':')[0], 10)
   const minute = parseInt(value.split(':')[1], 10)
   d.setHours(hour)
@@ -214,6 +226,11 @@ function isGreater(value) {
   const d1 = getDateTime(startTime.value)
   const d2 = getDateTime(value)
   return d2 > d1
+}
+
+function getMinutesDifference(d2, d1) {
+  const secs = Math.floor(Math.abs(d2 - d1) / 1000);
+  return Math.floor(secs / 60);
 }
 
 function setHovering(value) {
