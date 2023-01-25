@@ -96,7 +96,7 @@ const startTimes = computed(() => {
 })
 
 const endTimes = computed(() => {
-  const filter = i => isGreater(i)
+  const filter = i => nextDay.value ? true : isGreater(i)
   return times.value.slice(1, times.value.length)
     .concat([DEFAULT_END_TIME])
     .filter(filter)
@@ -347,11 +347,12 @@ watch(endTime, () => {
         :items="getTimes('end')"
         class="end-time"
         hide-details
+        no-data-text=""
         @blur="setFocusing(false)"
       >
         <template #append-item>
           <v-checkbox
-            :model-value="nextDay"
+            v-model="nextDay"
             :label="nextDayLabel"
             hide-details
           ></v-checkbox>
