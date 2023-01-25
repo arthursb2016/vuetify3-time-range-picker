@@ -26,7 +26,7 @@ const props = defineProps({
     default: () => [],
   },
   maxDuration: {
-    type: [String, Number],
+    type: Number,
     default: () => 0,
   },
 
@@ -103,7 +103,7 @@ const startTimes = computed(() => {
 const endTimes = computed(() => {
   const { maxDuration } = props
   const filter = (i) => {
-    const isTimeGreater = nextDay.value ? true : isGreater(i)
+    const isTimeGreater = isTimeGraterThanStart(i)
     const d2 = getDateTime(i, nextDay.value)
     const d1 = getDateTime(startTime.value)
     const minDiff = getMinutesDifference(d2, d1)
@@ -222,9 +222,9 @@ function getDateTime(value, addDay = false) {
   return d
 }
 
-function isGreater(value) {
+function isTimeGraterThanStart(value) {
+  const d2 = getDateTime(value, nextDay.value)
   const d1 = getDateTime(startTime.value)
-  const d2 = getDateTime(value)
   return d2 > d1
 }
 
@@ -345,10 +345,17 @@ onMounted(() => {
       })
     }
   }
+
+  // Max duration initialization
+  if (props.maxDuration) {
+    wholeDay.value = false
+    endTime.value = endTimes.value[endTimes.value.length - 1]
+  }
 })
 
 // Watchers
 watch(startTime, () => {
+  nextDay.value = false
   checkWholeDay()
   nextTick(() => {
     const isEndTimeStillAvailable = endTimes.value.find(t => t === endTime.value)
@@ -437,7 +444,7 @@ watch(endTime, () => {
         </template>
 
         <!-- NEXT DAY CHECKBOX -->
-        <template v-if="allowNextDay" #append-item>
+        <template v-if="allowNextDay && endTimes.includes('23:59')" #append-item>
           <v-checkbox
             v-model="nextDay"
             :label="nextDayLabel"
@@ -450,8 +457,8 @@ watch(endTime, () => {
 
     <!-- WHOLE DAY CHECKBOX -->
     <div
-      v-show="!hideWholeDayCheckbox"
       class="whole-day d-flex"
+      :class="{ 'hidden-input': hideWholeDayCheckbox || Boolean(maxDuration) }"
     >
       <v-checkbox
         v-model="wholeDay"
@@ -518,6 +525,12 @@ watch(endTime, () => {
       .v-messages {
         text-align: left;
         padding-left: 12px;
+      }
+    }
+    &.hidden-input {
+      :deep(.v-input__control) {
+        max-height: 0px;
+        overflow: hidden;
       }
     }
   }
