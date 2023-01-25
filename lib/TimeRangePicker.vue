@@ -41,6 +41,10 @@ const props = defineProps({
     type: String,
     default: () => '',
   },
+  inline: {
+    type: Boolean,
+    default: () => false
+  }
 })
 
 // Emits
@@ -238,7 +242,7 @@ watch(endTime, () => {
 </script>
 
 <template>
-  <div class="vuetify3-time-range-picker">
+  <div class="vuetify3-time-range-picker" :class="{ 'is-inline': inline }">
     <div
       class="v-selects-row"
       :class="{
@@ -291,6 +295,9 @@ watch(endTime, () => {
 
 <style lang="scss" scoped>
 .vuetify3-time-range-picker {
+  &.is-inline {
+    display: flex;
+  }
 
   .v-selects-row {
     display: flex;
