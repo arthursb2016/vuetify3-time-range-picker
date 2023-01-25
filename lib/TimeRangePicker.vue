@@ -49,6 +49,7 @@ let endTime = ref(DEFAULT_END_TIME)
 let isHovering = ref(false)
 let isFocusing = ref(null)
 let wholeDay = ref(true)
+let inputOutlinedClasses = ref([])
 
 // Computed
 const times = computed(() => {
@@ -133,16 +134,40 @@ function setFocusing(value) {
   isFocusing = value
   const componentQuery = '.vuetify3-time-range-picker .v-selects-row-container'
   if (isFocusing) {
-    const node = document.querySelector(`${componentQuery} .v-field:not(.v-field--focused)`)
-    if (node) {
-      node.classList.add('v-field--focused')
-      emit('focus')
-    }
+    addFocusedStyles(componentQuery)
     return
   }
-  const nodes = document.querySelectorAll(`${componentQuery} .v-field.v-field--focused`)
+  removeFocusedStyles(componentQuery)
+}
+
+function addFocusedStyles(query) {
+  const focusedNode = document.querySelector(`${query} .v-field.v-field--focused`)
+  const unfocusedNode = document.querySelector(`${query} .v-field:not(.v-field--focused)`)
+  if (focusedNode && unfocusedNode) {
+    unfocusedNode.classList.add('v-field--focused')
+    const outline1 = focusedNode.querySelector('.v-field__outline')
+    const outline2 = unfocusedNode.querySelector('.v-field__outline')
+    const classes = (outline1?.className || '').split(' ')
+    classes.forEach((name) => {
+      if (!outline2.classList.contains(name)) {
+        outline2.classList.add(name)
+        inputOutlinedClasses.value.push(name)
+      }
+    })
+    emit('focus')
+  }
+}
+
+function removeFocusedStyles(query) {
+  const nodes = document.querySelectorAll(`${query} .v-field.v-field--focused`)
   if (nodes) {
-    nodes.forEach((node) => node.classList.remove('v-field--focused'))
+    nodes.forEach((node) => {
+      node.classList.remove('v-field--focused')
+      const outline = node.querySelector('.v-field__outline')
+      inputOutlinedClasses.value.forEach((name) => {
+        outline.classList.remove(name)
+      })
+    })
     emit('blur')
   }
 }
@@ -232,6 +257,7 @@ watch(endTime, () => {
       <v-checkbox
         v-model="wholeDay"
         class="pt-0 mt-0"
+        :color="$attrs.color"
         :label="wholeDayLabel"
         :readonly="wholeDay"
         :disabled="$attrs.disabled || false"
