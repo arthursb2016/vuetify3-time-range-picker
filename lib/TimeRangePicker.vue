@@ -36,6 +36,16 @@ const props = defineProps({
     default: () => 'Whole day',
   },
 
+  // Next day feature
+  allowNextDay: {
+    type: Boolean,
+    default: () => false,
+  },
+  nextDayLabel: {
+    type: String,
+    default: () => 'Next day'
+  },
+
   // Styles
   innerDivCustomClass: {
     type: String,
@@ -59,6 +69,7 @@ let endTime = ref(DEFAULT_END_TIME)
 let isHovering = ref(false)
 let isFocusing = ref(null)
 let wholeDay = ref(true)
+let nextDay = ref(false)
 let inputOutlinedClasses = ref([])
 
 // Computed
@@ -280,7 +291,7 @@ onMounted(() => {
   initValues()
 
   // Autofocus check
-  if (attrs.autofocus) {
+  if (attrs.autofocus || attrs.autofocus === '') {
     const input = document.querySelector('.vuetify3-time-range-picker #startTimeSelect')
     if (input) {
       input.click()
@@ -337,7 +348,15 @@ watch(endTime, () => {
         class="end-time"
         hide-details
         @blur="setFocusing(false)"
-      ></v-select>
+      >
+        <template #append-item>
+          <v-checkbox
+            :model-value="nextDay"
+            :label="nextDayLabel"
+            hide-details
+          ></v-checkbox>
+        </template>
+      </v-select>
     </div>
     <div
       v-show="!hideWholeDayCheckbox"
