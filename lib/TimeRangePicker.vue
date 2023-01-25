@@ -35,6 +35,12 @@ const props = defineProps({
     type: String,
     default: () => 'Whole day',
   },
+
+  // Styles
+  innerDivCustomClass: {
+    type: String,
+    default: () => '',
+  },
 })
 
 // Emits
@@ -132,7 +138,7 @@ function isGreater(value) {
 
 function setFocusing(value) {
   isFocusing = value
-  const componentQuery = '.vuetify3-time-range-picker .v-selects-row-container'
+  const componentQuery = '.vuetify3-time-range-picker .v-selects-row'
   if (isFocusing) {
     addFocusedStyles(componentQuery)
     return
@@ -225,8 +231,11 @@ watch(endTime, () => {
 <template>
   <div class="vuetify3-time-range-picker">
     <div
-      class="v-selects-row-container"
-      :class="{ 'is-hovering': isHovering }"
+      class="v-selects-row"
+      :class="{
+        'is-hovering': isHovering,
+        [innerDivCustomClass]: true,
+      }"
       @mouseover="isHovering = true"
       @mouseleave="isHovering = false"
       @click="setFocusing(true)"
@@ -274,7 +283,7 @@ watch(endTime, () => {
 <style lang="scss" scoped>
 .vuetify3-time-range-picker {
 
-  .v-selects-row-container {
+  .v-selects-row {
     display: flex;
 
     &.is-hovering {
