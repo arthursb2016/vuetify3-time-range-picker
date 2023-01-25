@@ -192,19 +192,19 @@ function getTimes(name) {
   })
 }
 
+function getDateTime(value) {
+  const d = new Date()
+  const hour = parseInt(value.split(':')[0], 10)
+  const minute = parseInt(value.split(':')[1], 10)
+  d.setHours(hour)
+  d.setMinutes(minute)
+  d.setSeconds(0)
+  return d
+}
+
 function isGreater(value) {
-  const d1 = new Date()
-  const startHour = parseInt(startTime.value.split(':')[0], 10)
-  const startMinute = parseInt(startTime.value.split(':')[1], 10)
-  d1.setHours(startHour)
-  d1.setMinutes(startMinute)
-  d1.setSeconds(0)
-  const d2 = new Date()
-  const endHour = parseInt(value.split(':')[0], 10)
-  const endMinute = parseInt(value.split(':')[1], 10)
-  d2.setHours(endHour)
-  d2.setMinutes(endMinute)
-  d2.setSeconds(0)
+  const d1 = getDateTime(startTime.value)
+  const d2 = getDateTime(value)
   return d2 > d1
 }
 
