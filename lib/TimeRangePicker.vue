@@ -103,6 +103,24 @@ const requiresEndEmptyLabel = computed(() => {
   return ['filled', 'solo'].includes(attrs.variant)
 })
 
+const VSelectBindings = computed(() => {
+  const notAllowed = [
+    'active',
+    'append-icon',
+    'direction',
+  ]
+  const exclude = [
+    'autofocus'
+  ]
+  const bindings = { ...attrs }
+  Object.keys(bindings).forEach((key) => {
+    if (notAllowed.includes(key) || exclude.includes(key)) {
+      delete bindings[key]
+    }
+  })
+  return bindings
+})
+
 // Methods
 function doubleDigit(digit) {
   if ((typeof digit === 'string' && digit.length === 1)
@@ -223,6 +241,17 @@ function checkWholeDay() {
 // Hooks
 onMounted(() => {
   initValues()
+
+  // Autofocus check
+  if (attrs.autofocus) {
+    const input = document.querySelector('.vuetify3-time-range-picker #startTimeSelect')
+    if (input) {
+      input.click()
+      nextTick(() => {
+        setFocusing(true)
+      })
+    }
+  }
 })
 
 // Watchers
@@ -254,7 +283,8 @@ watch(endTime, () => {
       @click="setFocusing(true)"
     >
       <v-select
-        v-bind="$attrs"
+        id="startTimeSelect"
+        v-bind="VSelectBindings"
         v-model="startTime"
         :label="props.inputLabel"
         :items="getTimes('start')"
@@ -263,7 +293,7 @@ watch(endTime, () => {
         @blur="setFocusing(false)"
       ></v-select>
       <v-select
-        v-bind="$attrs"
+        v-bind="VSelectBindings"
         v-model="endTime"
         :label="requiresEndEmptyLabel ? ' ' : undefined"
         :items="getTimes('end')"
@@ -279,10 +309,10 @@ watch(endTime, () => {
       <v-checkbox
         v-model="wholeDay"
         class="pt-0 mt-0"
-        :color="$attrs.color"
+        :color="VSelectBindings.color"
         :label="wholeDayLabel"
         :readonly="wholeDay"
-        :disabled="$attrs.disabled || false"
+        :disabled="VSelectBindings.disabled || false"
         hide-details
         :class="{
           'cursor-not-allowed': wholeDay,
