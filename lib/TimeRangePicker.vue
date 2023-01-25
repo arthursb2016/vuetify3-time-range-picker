@@ -71,6 +71,7 @@ let isFocusing = ref(null)
 let wholeDay = ref(true)
 let nextDay = ref(false)
 let inputOutlinedClasses = ref([])
+let endTimeMenu = ref(false)
 
 // Computed
 const times = computed(() => {
@@ -286,6 +287,11 @@ function checkWholeDay() {
   wholeDay.value = false
 }
 
+function setEndTime(value) {
+  endTime.value = value
+  endTimeMenu = false
+}
+
 // Hooks
 onMounted(() => {
   initValues()
@@ -343,6 +349,7 @@ watch(endTime, () => {
       <v-select
         v-bind="VSelectBindings"
         v-model="endTime"
+        v-model:menu="endTimeMenu"
         :label="requiresEndEmptyLabel ? ' ' : undefined"
         :items="getTimes('end')"
         class="end-time"
@@ -350,6 +357,21 @@ watch(endTime, () => {
         no-data-text=""
         @blur="setFocusing(false)"
       >
+        <template #item="{ item }">
+          <div
+            class="v-list-item v-list-item--link v-theme--light v-list-item--density-default v-list-item--one-line v-list-item--variant-text"
+            @click="setEndTime(item.value)"
+          >
+            <span class="v-list-item__overlay"></span>
+            <span class="v-list-item__underlay"></span>
+            <span class=""></span>
+            <div class="v-list-item__content">
+              <div class="v-list-item-title">
+                {{ item.title }}
+              </div>
+            </div>
+          </div>
+        </template>
         <template #append-item>
           <v-checkbox
             v-model="nextDay"
