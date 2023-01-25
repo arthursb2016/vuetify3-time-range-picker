@@ -274,6 +274,7 @@ function initValues() {
 
 function onWholeDayChange() {
   if (!wholeDay) return
+  nextDay.value = false
   startTime.value = '00:00'
   endTime.value = '23:59'
   onChange()
