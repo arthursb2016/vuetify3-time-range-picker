@@ -3,6 +3,8 @@ import { ref } from 'vue'
 import TimeRangePicker from '../lib/TimeRangePicker.vue'
 
 let range = ref({ start: null, end: null })
+
+// variant options: 'underlined' | 'outlined' | 'filled' | 'solo' | 'plain'
 </script>
 
 <template>
@@ -11,7 +13,8 @@ let range = ref({ start: null, end: null })
     <TimeRangePicker
       v-model="range"
       variant="outlined"
-      step="30"
+      step="65"
+      color="red"
     />
   </v-app>
 </template>
