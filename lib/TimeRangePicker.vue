@@ -114,6 +114,37 @@ const VSelectBindings = computed(() => {
     'counter-value',
     'compact',
     'direction',
+    'hide-no-data',
+    'hide-selected',
+    'item-children',
+    'item-props',
+    'items',
+    'item-title',
+    'item-value',
+    'label',
+    'loading',
+    'menu',
+    'menu-icon',
+    'menu-props',
+    'model-value',
+    'multiple',
+    'no-data-text',
+    'open-on-clear',
+    'persistent-clear',
+    'persistent-counter',
+    'persistent-hint',
+    'persistent-placeholder',
+    'placeholder',
+    'prefix',
+    'prepend-icon',
+    'prepend-inner-icon',
+    'return-object',
+    'reverse',
+    'rules',
+    'single-line',
+    'suffix',
+    'validate-on',
+    'value-comparator',
   ]
   const exclude = [
     'autofocus'
@@ -319,11 +350,10 @@ watch(endTime, () => {
         :label="wholeDayLabel"
         :readonly="wholeDay"
         :disabled="VSelectBindings.disabled || false"
-        :class="{
-          'cursor-not-allowed': wholeDay,
-        }"
+        :class="{ 'cursor-not-allowed': wholeDay }"
         :error-messages="attrs['error-messages'] || attrs.errorMessages"
-        :hide-details="attrs['hide-details'] || attrs.hideDetails"
+        :hide-details="attrs['hide-details'] || attrs['hide-details'] === ''"
+        :messages="attrs.hint"
         @change="onWholeDayChange"
       ></v-checkbox>
     </div>
