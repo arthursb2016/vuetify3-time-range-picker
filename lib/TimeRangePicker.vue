@@ -328,7 +328,9 @@ watch(endTime, () => {
 watch(nextDay, () => {
   if (nextDay.value) {
     endTime.value = '00:00'
+    return
   }
+  endTime.value = endTimes.value[0]
 })
 </script>
 
@@ -381,6 +383,7 @@ watch(nextDay, () => {
         <template #item="{ item }">
           <div
             class="v-list-item v-list-item--link v-theme--light v-list-item--density-default v-list-item--one-line v-list-item--variant-text"
+            :class="{ 'v-list-item--active': item.value === endTime }"
             @click="setEndTime(item.value)"
           >
             <span class="v-list-item__overlay"></span>
