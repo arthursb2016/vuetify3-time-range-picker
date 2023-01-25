@@ -227,7 +227,7 @@ watch(endTime, () => {
     </div>
     <div
       v-show="!hideWholeDayCheckbox"
-      class="whole-day mt-1 d-flex"
+      class="whole-day d-flex"
     >
       <v-checkbox
         v-model="wholeDay"
