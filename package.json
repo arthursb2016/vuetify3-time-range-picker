@@ -1,8 +1,16 @@
 {
   "name": "vuetify3-time-range-picker",
-  "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
+  "files": ["dist"],
+  "main": "./dist/vuetify3-time-range-picker.umd.cjs",
+  "module": "./dist/vuetify3-time-range-picker.js",
+  "exports": {
+    ".": {
+      "import": "./dist/vuetify3-time-range-picker.js",
+      "require": "./dist/vuetify3-time-range-picker.umd.js"
+    }
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",

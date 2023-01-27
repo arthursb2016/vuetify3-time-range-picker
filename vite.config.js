@@ -6,15 +6,16 @@ export default defineConfig({
   plugins: [vue()],
   build: {
     lib: {
-      entry: resolve(__dirname, 'lib/main.ts'),
+      entry: resolve(__dirname, 'lib/main.js'),
       name: 'TimeRangePicker',
-      fileName: 'time-range-picker'
+      fileName: 'vuetify3-time-range-picker'
     },
     rollupOptions: {
       external: ['vue', 'vuetify'],
       output: {
         globals: {
-          vue: 'Vue'
+          vue: 'Vue',
+          vuetify: 'Vuetify'
         }
       }
     }
