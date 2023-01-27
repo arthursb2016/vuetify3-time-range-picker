@@ -5,6 +5,8 @@ import { VSelect, VCheckbox, VChip }from 'vuetify/components'
 // Consts
 const DEFAULT_START_TIME = '00:00'
 const DEFAULT_END_TIME = '23:59'
+const componentCount = (document.querySelectorAll('.vuetify3-time-range-picker') || []).length
+const componentIndexClass = `index-${componentCount}`
 
 // Props
 const props = defineProps({
@@ -244,7 +246,7 @@ function setHovering(value) {
 
 function setFocusing(value) {
   isFocusing = value
-  const componentQuery = '.vuetify3-time-range-picker .v-selects-row'
+  const componentQuery =  `.vuetify3-time-range-picker.${componentIndexClass} .v-selects-row`
   if (isFocusing) {
     addFocusedStyles(componentQuery)
     return
@@ -337,7 +339,7 @@ onMounted(() => {
 
   // Autofocus check
   if (attrs.autofocus || attrs.autofocus === '') {
-    const input = document.querySelector('.vuetify3-time-range-picker #startTimeSelect')
+    const input = document.querySelector(`.vuetify3-time-range-picker.${componentIndexClass} .start-time`)
     if (input) {
       input.click()
       nextTick(() => {
@@ -371,7 +373,13 @@ watch(endTime, () => {
 </script>
 
 <template>
-  <div class="vuetify3-time-range-picker" :class="{ 'is-inline': inline }">
+  <div
+    class="vuetify3-time-range-picker"
+    :class="{
+      [componentIndexClass]: true,
+      'is-inline': inline
+    }"
+  >
     <div
       class="v-selects-row"
       :class="{
@@ -383,7 +391,6 @@ watch(endTime, () => {
       @click="setFocusing(true)"
     >
       <v-select
-        id="startTimeSelect"
         v-bind="VSelectBindings"
         v-model="startTime"
         :label="props.inputLabel"
