@@ -1,5 +1,6 @@
 {
   "name": "vuetify3-time-range-picker",
+  "description": "A time range picker, made so users can easily pick a time interval.",
   "version": "1.0.0",
   "type": "module",
   "files": ["dist"],
@@ -26,5 +27,24 @@
     "@vitejs/plugin-vue": "^4.0.0",
     "sass": "^1.57.1",
     "vite": "^4.0.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arthursb2016/vuetify3-time-range-picker.git"
+  },
+  "author": "Arthur Borba",
+  "license": "MIT",
+  "keywords": [
+    "vuetify",
+    "vue",
+    "vuetify 3",
+    "vue 3",
+    "time range picker",
+    "time picker",
+    "interval"
+  ],
+  "bugs": {
+    "url": "https://github.com/arthursb2016/vuetify3-time-range-picker/issues"
+  },
+  "homepage": "https://github.com/arthursb2016/vuetify3-time-range-picker#readme"
 }
