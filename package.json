@@ -9,7 +9,8 @@
     ".": {
       "import": "./dist/vuetify3-time-range-picker.js",
       "require": "./dist/vuetify3-time-range-picker.umd.js"
-    }
+    },
+    "./dist/style.css": "./dist/style.css"
   },
   "scripts": {
     "dev": "vite",
