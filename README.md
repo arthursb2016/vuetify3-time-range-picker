@@ -53,7 +53,7 @@ export default {
     <time-range-picker
       v-model="time"
       :input-label="Interval"
-      variant="solor"
+      variant="solo"
       step="30"
     />
   </v-app>
@@ -63,16 +63,16 @@ export default {
 
 | Name  | Type | Description | Default Value |
 | ------------- |:-------------:|:-------------:|:-------------:|
-| modelValue | Object  | An object used as v-model containing 'start', 'end' and 'duration' | { start: '00:00', end: '23:59', duration: 1439 } |
+| modelValue | Object  | An object used as v-model containing 'start', 'end' and 'duration' | { start: '00:00', end: '23:59', duration: 1439 } (duration is in minutes) |
 | inputLabel | String  | Input label text | 'Interval' |
 | wholeDayLabel  | String  | Whole day checkbox label text | 'Whole day' |
 | step |String, Number | Interval of minutes between available times | 15 |
 | innerDivCustomClass | String | Custom CSS classes to be added at input's wrapper | '' |
 | inline | Boolean | Applies the inline style | false |
-| hideWholeDayCheckbox | Boolean | Hides whole day option | false |
+| hideWholeDayCheckbox | Boolean | Hides whole day option (this becomes true if maxDuration is set) | false |
 | maxDuration | Number | Max range duration (in minutes, 0 means no max) | 0 |
-| allowNextDay | Boolean | Enables next day end time | false |
-| nextDayLabel | String | End time next day checkbox label | 'Next day' |
+| allowNextDay | Boolean | Enables next day end time selection | false |
+| nextDayLabel | String | Next day checkbox label | 'Next day' |
 <br />
 
 Besides you can also pass most of the [v-select props](https://next.vuetifyjs.com/en/api/v-select/).
@@ -91,8 +91,6 @@ Besides you can also pass most of the [v-select props](https://next.vuetifyjs.co
 
 #### Max duration
 
-![Demo](images/2.gif?raw=true)
-
 ```html
 <time-range-picker
   v-model="range"
@@ -103,9 +101,9 @@ Besides you can also pass most of the [v-select props](https://next.vuetifyjs.co
 />
 ```
 
-#### Allow next day
+![Demo](images/2.gif?raw=true)
 
-![Demo](images/3.gif?raw=true)
+#### Allow next day
 
 ```html
 <time-range-picker
@@ -117,6 +115,8 @@ Besides you can also pass most of the [v-select props](https://next.vuetifyjs.co
   allow-next-day
 />
 ```
+
+![Demo](images/3.gif?raw=true)
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
