@@ -11,9 +11,10 @@ let range = ref({ start: null, end: null })
   <v-app id="app">
     <TimeRangePicker
       v-model="range"
-      variant="filled"
-      step="65"
-      allow-next-day
+      variant="underlined"
+      step="15"
+      :max-duration="60"
+      color="blue"
     />
   </v-app>
 </template>

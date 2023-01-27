@@ -1,7 +1,122 @@
-# Vue 3 + Vite
+# vuetify3-time-range-picker
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+A time range picker based on [Vuetify 3](https://next.vuetifyjs.com/en/), made so users can easily pick a time interval.
 
-## Recommended IDE Setup
+![Demo](images/1.gif?raw=true)
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+Compatible with Vue 3 and Vuetify 3
+
+If you are looking for the version 2 compatible package: [check the previous version](https://github.com/arthursb2016/vuetify-time-range-picker).
+
+## Installation
+
+#### NPM
+```bash
+npm i vuetify3-time-range-picker
+```
+
+#### YARN
+```
+yarn add vuetify3-time-range-picker
+```
+
+## Usage
+Dependencies: [Vue 3](https://vuejs.org/) and [Vuetify 3](https://next.vuetifyjs.com/en/)
+
+#### JavaScript
+```javascript
+// main.js
+import App from './App.vue'
+import { createApp } from 'vue'
+import { createVuetify } from 'vuetify'
+import 'vuetify/styles'
+
+createApp(App).use(createVuetify({})).mount('#app')
+
+// Component.vue
+import TimeRangePicker from 'vuetify3-time-range-picker';
+import 'vuetify3-time-range-picker/dist/style.css'
+
+export default {
+  ...,
+  components: {
+    TimeRangePicker,
+  },
+};
+
+```
+
+#### HTML
+```html
+<template>
+  <v-app id="app">
+    <time-range-picker
+      v-model="time"
+      :input-label="Interval"
+      variant="solor"
+      step="30"
+    />
+  </v-app>
+</template>
+```
+## Props
+
+| Name  | Type | Description | Default Value |
+| ------------- |:-------------:|:-------------:|:-------------:|
+| modelValue | Object  | An object used as v-model containing 'start', 'end' and 'duration' | { start: '00:00', end: '23:59', duration: 1439 } |
+| inputLabel | String  | Input label text | 'Interval' |
+| wholeDayLabel  | String  | Whole day checkbox label text | 'Whole day' |
+| step |String, Number | Interval of minutes between available times | 15 |
+| innerDivCustomClass | String | Custom CSS classes to be added at input's wrapper | '' |
+| inline | Boolean | Applies the inline style | false |
+| hideWholeDayCheckbox | Boolean | Hides whole day option | false |
+| maxDuration | Number | Max range duration (in minutes, 0 means no max) | 0 |
+| allowNextDay | Boolean | Enables next day end time | false |
+| nextDayLabel | String | End time next day checkbox label | 'Next day' |
+<br />
+
+Besides you can also pass most of the [v-select props](https://next.vuetifyjs.com/en/api/v-select/).
+
+## Events
+
+| Name  | Description |
+| ------------- |:-------------:|
+| update:modelValue | Updates the v-model value |
+| mouseover | Emitted at input mouseover |
+| mouseleave | Emitted at input mouseleave |
+| focus | Emitted at input focus |
+| blur | Emitted at input blur |
+
+## More Examples
+
+#### Max duration
+
+![Demo](images/2.gif?raw=true)
+
+```html
+<time-range-picker
+  v-model="range"
+  variant="underlined"
+  step="60"
+  :max-duration="120"
+  color="blue"
+/>
+```
+
+#### Allow next day
+
+![Demo](images/3.gif?raw=true)
+
+```html
+<time-range-picker
+  v-model="range"
+  variant="filled"
+  step="60"
+  :max-duration="360"
+  color="green"
+  allow-next-day
+/>
+```
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)

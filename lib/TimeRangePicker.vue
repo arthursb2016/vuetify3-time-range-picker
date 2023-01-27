@@ -23,6 +23,7 @@ const props = defineProps({
     type: [String, Number],
     default: () => 15,
   },
+  // TODO: apply this prop
   disabledTimes: {
     type: [String, Array],
     default: () => [],
