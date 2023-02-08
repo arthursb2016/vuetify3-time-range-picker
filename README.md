@@ -52,7 +52,6 @@ export default {
   <v-app id="app">
     <time-range-picker
       v-model="time"
-      :input-label="Interval"
       variant="solo"
       step="30"
     />
