@@ -1,7 +1,7 @@
 {
   "name": "vuetify3-time-range-picker",
   "description": "A time range picker, made so users can easily pick a time interval.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "files": ["dist"],
   "main": "./dist/vuetify3-time-range-picker.umd.cjs",
