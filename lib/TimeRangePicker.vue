@@ -2,12 +2,6 @@
 import { ref, computed, watch, nextTick, useAttrs, onMounted } from 'vue'
 import { VSelect, VCheckbox, VChip }from 'vuetify/components'
 
-// Consts
-const DEFAULT_START_TIME = '00:00'
-const DEFAULT_END_TIME = '23:59'
-const componentCount = (document.querySelectorAll('.vuetify3-time-range-picker') || []).length
-const componentIndexClass = `index-${componentCount}`
-
 // Props
 const props = defineProps({
   // Input
@@ -23,7 +17,7 @@ const props = defineProps({
     type: [String, Number],
     default: () => 15,
   },
-  // TODO: apply this prop
+
   disabledTimes: {
     type: [String, Array],
     default: () => [],
@@ -69,6 +63,12 @@ const emit = defineEmits(['update:modelValue', 'focus', 'blur', 'mouseover', 'mo
 
 // Attrs
 const attrs = useAttrs()
+
+// Consts
+const DEFAULT_START_TIME = '00:00'
+const DEFAULT_END_TIME = '23:59'
+const componentKey = attrs.key || (new Date( )).getTime()
+const componentIndexClass = `vtrp-index-${componentKey}`
 
 // Variables
 let startTime = ref(DEFAULT_START_TIME)
@@ -152,7 +152,6 @@ const VSelectBindings = computed(() => {
     'loading',
     'menu',
     'menu-icon',
-    'menu-props',
     'model-value',
     'multiple',
     'no-data-text',
@@ -176,7 +175,9 @@ const VSelectBindings = computed(() => {
   const exclude = [
     'autofocus'
   ]
+
   const bindings = { ...attrs }
+
   Object.keys(bindings).forEach((key) => {
     if (notAllowed.includes(key) || exclude.includes(key)) {
       delete bindings[key]
@@ -207,9 +208,8 @@ function getTimes(name) {
     return {
       title: time,
       value: time,
-      disabled: computedDisabledTimes.value.includes(time),
     }
-  })
+  }).filter(t => !computedDisabledTimes.value.includes(t.value))
 }
 
 function getDateTime(value, addDay = false) {

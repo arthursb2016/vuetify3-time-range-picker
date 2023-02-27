@@ -66,6 +66,7 @@ export default {
 | inputLabel | String  | Input label text | 'Interval' |
 | wholeDayLabel  | String  | Whole day checkbox label text | 'Whole day' |
 | step |String, Number | Interval of minutes between available times | 15 |
+| disabledTimes | String, String[] | Times to be removed from options (e.g. ['00:00', '12:00']) | [] |
 | innerDivCustomClass | String | Custom CSS classes to be added at input's wrapper | '' |
 | inline | Boolean | Applies the inline style | false |
 | hideWholeDayCheckbox | Boolean | Hides whole day option (this becomes true if maxDuration is set) | false |
