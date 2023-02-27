@@ -238,7 +238,7 @@ function getMinutesDifference(d2, d1) {
 
 function setHovering(value) {
   isHovering.value = value
-  if (isHovering) {
+  if (isHovering.value) {
     emit('mouseover')
     return
   }
@@ -246,9 +246,9 @@ function setHovering(value) {
 }
 
 function setFocusing(value) {
-  isFocusing = value
+  isFocusing.value = value
   const componentQuery =  `.vuetify3-time-range-picker.${componentIndexClass} .v-selects-row`
-  if (isFocusing) {
+  if (isFocusing.value) {
     addFocusedStyles(componentQuery)
     return
   }
